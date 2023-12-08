@@ -9,7 +9,7 @@ resetFilterBtn = document.querySelector(".reset-filter"),
 chooseImgBtn = document.querySelector(".choose-img"),
 saveImgBtn = document.querySelector(".save-img");
 
-let brightness = "100", saturation = "100", inversion = "0", grayscale = "0", blur = "0" ;
+let brightness = "100", saturation = "100", inversion = "0", grayscale = "0", blur = "0", scale="1" ;
 let rotate = 0, flipHorizontal = 1, flipVertical = 1;
 
 const loadImage = () => {
@@ -23,8 +23,8 @@ const loadImage = () => {
 }
 
 const applyFilter = () => {
-    previewImg.style.transform = `rotate(${rotate}deg) scale(${flipHorizontal}, ${flipVertical})`;
-    previewImg.style.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%) blur(${blur}px)`;
+    previewImg.style.transform = `rotate(${rotate}deg) scale(${flipHorizontal}, ${flipVertical}) scale(${scale})`;
+    previewImg.style.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%) blur(${blur}px) `;
 }
 
 filterOptions.forEach(option => {
@@ -49,6 +49,11 @@ filterOptions.forEach(option => {
             filterSlider.max = "100";
             filterSlider.value = blur;
             filterValue.innerText = `${blur}%`;
+        } else if(option.id === "scale") {
+            filterSlider.max = "10";
+            filterSlider.min = "1";
+            filterSlider.value = scale;
+            filterValue.innerText = `${scale}%`;
         } else {
             filterSlider.max = "100";
             filterSlider.value = grayscale;
@@ -67,6 +72,8 @@ const updateFilter = () => {
         saturation = filterSlider.value;
     } else if(selectedFilter.id === "inversion") {
         inversion = filterSlider.value;
+    } else if(selectedFilter.id === "scale") {
+        scale = filterSlider.value;
     } else if(selectedFilter.id === "blur") {
         blur = filterSlider.value;
     } else {
@@ -91,7 +98,7 @@ rotateOptions.forEach(option => {
 });
 
 const resetFilter = () => {
-    brightness = "100"; saturation = "100"; inversion = "0"; grayscale = "0";blur = "0";
+    brightness = "100"; saturation = "100"; inversion = "0"; grayscale = "0";blur = "0"; scale ="1";
     rotate = 0; flipHorizontal = 1; flipVertical = 1;
     filterOptions[0].click();
     applyFilter();
@@ -105,6 +112,8 @@ const saveImage = () => {
     
     ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)  blur(${blur}px)`;
     ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.transform(scale, 0, 0, scale, 0, 0); // Scale by a factor of 1.4 in both x and y directions
+
     if(rotate !== 0) {
         ctx.rotate(rotate * Math.PI / 180);
     }
