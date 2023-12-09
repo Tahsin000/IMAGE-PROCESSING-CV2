@@ -4,4 +4,4 @@
 
 ## [live view](https://tahsin000.github.io/IMAGE-PROCESSING-CV2/)
 
-![Alt text](image.png)
+![Alt text](image.png)READ
